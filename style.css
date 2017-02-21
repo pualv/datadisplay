@@ -1,0 +1,37 @@
+body {
+		font-family: arial;
+}
+
+.sort {
+	width: 4rem;
+	height: 3rem;
+	background-color: #7e6;
+	text-align: center;
+}
+
+
+#content {
+	width: 100%;
+
+
+
+}
+
+.unit {
+	font-size: 1rem;
+	width: 8rem;
+	height: 8rem;
+	margin: 1rem;
+	background-color: #aaaaaa;
+
+	text-align: center;
+	/*line-height: 6rem;  vertical centre text in circle */
+	border-radius: 50%; /* make div circle */
+	float: left;
+
+	/*centre the text*/
+	display: flex;
+    justify-content:center;
+    align-content:center;
+    flex-direction:column; /* column | row */
+}
