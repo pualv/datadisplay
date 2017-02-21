@@ -8,7 +8,7 @@ window.onload = function () {
               url: "data.csv",
               cache: false,
               success: function(csv){
-                // when it's lodade call the function that turns into an object
+                // when it's loaded call the function that turns into an object
                 dataLoaded(csv);
               }
             });
@@ -26,11 +26,11 @@ window.onload = function () {
             // one adds a one off event handler to the div. This adds the opposite handler when clicked so that the button acts as a toggle.
             function sortUp() {
                 $(this).one('click', sortDown);
-                sortIt(data, 'country', -1);
+                sortIt(data, 'area', -1);
             }
             function sortDown() {
                 $(this).one('click', sortUp);
-                sortIt(data, 'country', 1);
+                sortIt(data, 'area', 1);
             }
                 
             $('.sort').one('click', sortUp);
@@ -64,18 +64,23 @@ window.onload = function () {
                 var opp = -1 * direction;
                 
 
-            function SortByName(a, b){
-                var aName = a[field].toLowerCase();
-                var bName = b[field].toLowerCase(); 
-                return ((aName < bName) ? direction : ((aName > bName) ? opp : 0));
-                
-                }
+            
 
-            data = dataset.sort(SortByName);
+                data = dataset.sort(function (a, b){
+                    var a = a[field];
+                    var b = b[field]; 
+                    // check for string or number cos numbers will be sorted by string value (e.g. 1023, 23, 301, 45)
+                    if (isNaN(a) || isNaN(b)) {
+                        // sort strings 
+                        return ((a < b) ? direction : ((a > b) ? opp : 0));
+                    }
+                    // or sort numbers. * direction is to flip sort direction
+                    return (a - b) * direction;
+                });
 
             disPlay(data)
 
-           console.log (direction);
+           console.log (data);
 
             // disPlay(dataset);
         } //sortIt
