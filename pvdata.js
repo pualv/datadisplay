@@ -14,28 +14,45 @@ window.onload = function () {
             });
 
 
+
+// click handlers - toggle sort direction
+            // one adds a one off event handler to the div. This adds the opposite handler when clicked so that the button acts as a toggle.
+            // function sortUp(field) {
+            //     $(this).one('click', sortDown);
+            //     sortIt(data, 'area', -1);
+            // }
+            // function sortDown() {
+            //     $(this).one('click', sortUp);
+            //     sortIt(data, 'area', 1);
+            // }
+
+
+        function sortClick(event){
+            var field = event.data.field; // which button has been clicked
+            var direction = 1; // direction of sort dependent on toggle of button
+            // handle the toggle
+            var clicks = $(this).data('clicks');
+            if (clicks) {
+                direction = 1;
+            } else {
+                direction = -1;
+            }
+            $(this).data("clicks", !clicks);
+               
+            sortIt(data, field, direction);
+        }
+
+
+
         function dataLoaded(csv){
             // do everything once data is loaded
 
             // convert csv file to object
             data = objectIfy(csv);
-
-            
-
-            // click handlers - toggle sort direction
-            // one adds a one off event handler to the div. This adds the opposite handler when clicked so that the button acts as a toggle.
-            function sortUp() {
-                $(this).one('click', sortDown);
-                sortIt(data, 'area', -1);
-            }
-            function sortDown() {
-                $(this).one('click', sortUp);
-                sortIt(data, 'area', 1);
-            }
                 
-            $('.sort').one('click', sortUp);
-
-
+            $('.area').on('click', {field: 'area', clicks : 'click'}, sortClick);
+            $('.population').on('click', {field: 'population'}, sortClick);
+            $('.country').on('click', {field: 'country'}, sortClick);
 
             disPlay(data);
         }
