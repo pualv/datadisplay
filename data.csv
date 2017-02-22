@@ -1,5 +1,4 @@
-country,continent,population,area,birthrate,deathrate,lifeexpect
-Åaland Islands,europe,29013,1580,0,0,0
+name,continent,population,area,birthrate,deathrate,lifeexpect
 Afghanistan,asia,33332025,652230,38.3,13.7,51.3
 Albania,europe,3038594,28748,13.1,6.7,78.3
 Algeria,africa,40263711,2381741,23,4.3,76.8
@@ -247,3 +246,4 @@ Western Sahara,africa,587020,266000,29.8,8.2,63
 Yemen,asia,27392779,527968,29.2,6.1,65.5
 Zambia,africa,15510711,752618,41.8,12.4,52.5
 Zimbabwe,africa,14546961,390757,31.9,9.9,58
+Åaland Islands,europe,29013,1580,0,0,0

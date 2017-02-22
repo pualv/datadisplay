@@ -2,22 +2,23 @@ window.onload = function () {
     (function () {
         // this loads data from a csv file, converts it, using a plugin, into an object and displays it. It needs jQuery for the ajax (loading the data) and for the plugin.
         
-        setUpbuttons();
+       
 
         // load data from csv file
         $.ajax({
-              url: "data.csv",
-              cache: false,
-              success: function(csv){
-                // when it's loaded call the function that turns into an object
-                dataLoaded(csv);
-              }
-            });
+            url: "data.csv",
+            cache: false,
+            success: function(csv){
+            // when it's loaded call the function that turns into an object
+            dataLoaded(csv);
+            }
+        }); //ajax
+
 
         function setUpbuttons(){
             // could be done automatically from data but this is more flexible
             fields = [
-                'country',
+                'name',
                 'area',
                 'population'
             ];
@@ -30,19 +31,14 @@ window.onload = function () {
 
              
             for(var i=0;i<fields.length;i++) {
+                // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
                 (function (i) {
                     $('.'+fields[i]).on('click', {field: fields[i], clicks : 'click'}, sortClick);;
                 }(i));
             }
-
         } // setUpbuttons
 
-     
-                
-        
-      
-
-
+        // buttons click event
         function sortClick(event){
             var field = event.data.field; // which button has been clicked
             var direction = 1; // direction of sort dependent on toggle of button
@@ -55,23 +51,28 @@ window.onload = function () {
             }
             $(this).data("clicks", !clicks);
                
+            // do the sort   
             sortIt(data, field, direction);
-        }
+
+             $('.info').html(field); 
+
+        } //sortClick
 
 
+        // Action central *********
+
+        setUpbuttons();
 
         function dataLoaded(csv){
             // do everything once data is loaded
 
             // convert csv file to object
             data = objectIfy(csv);
-                
-            // $('.area').on('click', {field: 'area', clicks : 'click'}, sortClick);
-            // $('.population').on('click', {field: 'population'}, sortClick);
-            // $('.country').on('click', {field: 'country'}, sortClick);
-
             disPlay(data);
         } //dataLoaded
+
+
+        // *************************
 
 
         function objectIfy(csv){
@@ -86,14 +87,10 @@ window.onload = function () {
 
             for (i = 0; i < dataset.length; i = i + 1) {
 
-                var unitwrite = "<div class='unit " + dataset[i].continent + "'>" + dataset[i].country + "</div>";
+                var unitwrite = "<div class='unit " + dataset[i].continent + "'>" + dataset[i].name + "</div>";
                 document.getElementById('content').innerHTML += unitwrite;
-
-              
             }
-        } //display
-
-       
+        } //disPlay
 
 
         function sortIt(dataset, field, direction){
@@ -110,9 +107,8 @@ window.onload = function () {
                     // or sort numbers. * direction is to flip sort direction
                     return (a - b) * direction;
                 });
-
-            disPlay(data)
+            disPlay(data);
         } //sortIt
 
     }());
-}; // onload
+}; // onload;
