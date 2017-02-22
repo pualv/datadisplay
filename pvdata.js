@@ -2,6 +2,7 @@ window.onload = function () {
     (function () {
         // this loads data from a csv file, converts it, using a plugin, into an object and displays it. It needs jQuery for the ajax (loading the data) and for the plugin.
         
+        setUpbuttons();
 
         // load data from csv file
         $.ajax({
@@ -13,18 +14,22 @@ window.onload = function () {
               }
             });
 
+        function setUpbuttons(){
+            // could be done automatically from data but this is more flexible
+            fields = [
+                'country',
+                'area',
+                'population'
+            ];
 
-
-// click handlers - toggle sort direction
-            // one adds a one off event handler to the div. This adds the opposite handler when clicked so that the button acts as a toggle.
-            // function sortUp(field) {
-            //     $(this).one('click', sortDown);
-            //     sortIt(data, 'area', -1);
-            // }
-            // function sortDown() {
-            //     $(this).one('click', sortUp);
-            //     sortIt(data, 'area', 1);
-            // }
+            for (let i = 0; i < fields.length; i = i + 1) {
+                name = fields[i];
+                buttoncode =  "<div class='" + name + " button'>" + name + "</div>";
+                document.getElementById('buttons').innerHTML += buttoncode;
+               
+                
+            }
+        }
 
 
         function sortClick(event){
@@ -55,12 +60,13 @@ window.onload = function () {
             $('.country').on('click', {field: 'country'}, sortClick);
 
             disPlay(data);
-        }
+        } //dataLoaded
+
 
         function objectIfy(csv){
             data = $.csv.toObjects(csv);
             return data;
-        }
+        } //onjectIfy
 
 
         function disPlay(dataset){
@@ -72,17 +78,12 @@ window.onload = function () {
                 var unitwrite = "<div class='unit'>" + (dataset[i].country) + "</div>";
                 document.getElementById('content').innerHTML += unitwrite;
             }
-
         } //display
 
 
         function sortIt(dataset, field, direction){
                 // set direction of search params based on direction
                 var opp = -1 * direction;
-                
-
-            
-
                 data = dataset.sort(function (a, b){
                     var a = a[field];
                     var b = b[field]; 
@@ -96,10 +97,6 @@ window.onload = function () {
                 });
 
             disPlay(data)
-
-           console.log (data);
-
-            // disPlay(dataset);
         } //sortIt
 
     }());
