@@ -3,7 +3,7 @@ body {
 }
 
 .button{
-	width: 4rem;
+	width: 6rem;
 	height: 3rem;
 	background-color: #7e6;
 	text-align: center;
@@ -20,11 +20,11 @@ body {
 }
 
 .unit {
-	font-size: 1rem;
-	width: 8rem;
-	height: 8rem;
-	margin: 1rem;
-	background-color: #aaaaaa;
+	font-size: .8rem;
+	width: 4.5rem;
+	height: 4.5rem;
+	margin: .125rem;
+	background-color: #cccccc;
 
 	text-align: center;
 	/*line-height: 6rem;  vertical centre text in circle */
@@ -36,4 +36,36 @@ body {
     justify-content:center;
     align-content:center;
     flex-direction:column; /* column | row */
+}
+
+.asia {
+	background-color: #F6C4B9;
+}
+
+.africa {
+	background-color: #F6D9B9;
+}
+
+.europe {
+	background-color: #E3F6B9;
+}
+
+.namerica {
+	background-color: #B9F6F3;
+}
+
+.samerica {
+	background-color: #C1DBF7;
+}
+
+.oceania {
+	background-color: #F9CEF9;
+}
+
+.camerica{
+	background-color: #B9ECF6;
+}
+
+.australia {
+	background-color: #F9CEE4;
 }

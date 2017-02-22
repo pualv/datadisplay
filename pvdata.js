@@ -86,10 +86,14 @@ window.onload = function () {
 
             for (i = 0; i < dataset.length; i = i + 1) {
 
-                var unitwrite = "<div class='unit'>" + (dataset[i].country) + "</div>";
+                var unitwrite = "<div class='unit " + dataset[i].continent + "'>" + dataset[i].country + "</div>";
                 document.getElementById('content').innerHTML += unitwrite;
+
+              
             }
         } //display
+
+       
 
 
         function sortIt(dataset, field, direction){
