@@ -51,10 +51,16 @@ window.onload = function () {
             }
             $(this).data("clicks", !clicks);
                
-            // do the sort   
+          
             sortIt(data, field, direction);
 
-             $('.info').html(field); 
+            disPlay(data);
+
+            $('.info').html(field); 
+
+            arrowdir = (direction < 1)? 'up':'down';
+            $('.arrow').removeClass('up down').addClass(arrowdir);
+       
 
         } //sortClick
 
@@ -107,7 +113,7 @@ window.onload = function () {
                     // or sort numbers. * direction is to flip sort direction
                     return (a - b) * direction;
                 });
-            disPlay(data);
+            return data;
         } //sortIt
 
     }());

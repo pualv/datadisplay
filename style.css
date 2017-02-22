@@ -50,12 +50,40 @@ body {
     flex-direction:column; /* column | row */
 }
 
+.arrow {
+	float: left;
+	display: block;
+	-webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+}
+
+.up{
+	-ms-transform: rotate(180deg); 
+	-webkit-transform: rotate(180deg); 
+	transform: rotate(180deg);
+
+}
+
+.down{
+	-ms-transform: rotate(0deg); 
+	-webkit-transform: rotate(0deg); 
+	transform: rotate(0deg);
+} 
+
+
+.info {
+	float: left;
+	display: block;
+	margin-top: .7rem;
+}
+
 .asia {
 	background-color: #F6C4B9;
 }
 
 .africa {
-	background-color: #F6D9B9;
+	background-color: #F2E798;
 }
 
 .europe {
@@ -80,10 +108,4 @@ body {
 
 .australia {
 	background-color: #F9CEE4;
-}
-
-hr {
-	height: 1px;
-	border:0;
-	border-top: 1px solid #333;
 }
