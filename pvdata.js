@@ -22,14 +22,25 @@ window.onload = function () {
                 'population'
             ];
 
-            for (let i = 0; i < fields.length; i = i + 1) {
+            for (var i = 0; i < fields.length; i = i + 1) {
                 name = fields[i];
                 buttoncode =  "<div class='" + name + " button'>" + name + "</div>";
                 document.getElementById('buttons').innerHTML += buttoncode;
-               
-                
             }
-        }
+
+             
+            for(var i=0;i<fields.length;i++) {
+                (function (i) {
+                    $('.'+fields[i]).on('click', {field: fields[i], clicks : 'click'}, sortClick);;
+                }(i));
+            }
+
+        } // setUpbuttons
+
+     
+                
+        
+      
 
 
         function sortClick(event){
@@ -55,9 +66,9 @@ window.onload = function () {
             // convert csv file to object
             data = objectIfy(csv);
                 
-            $('.area').on('click', {field: 'area', clicks : 'click'}, sortClick);
-            $('.population').on('click', {field: 'population'}, sortClick);
-            $('.country').on('click', {field: 'country'}, sortClick);
+            // $('.area').on('click', {field: 'area', clicks : 'click'}, sortClick);
+            // $('.population').on('click', {field: 'population'}, sortClick);
+            // $('.country').on('click', {field: 'country'}, sortClick);
 
             disPlay(data);
         } //dataLoaded

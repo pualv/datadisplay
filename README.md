@@ -8,8 +8,8 @@ Loads data from csv file (example file uses basic country facts).
 
 Puts data into object.
 
-Displays one field (country name).
+Countries can be ordered by name, population or area. Buttons toggle sort direction.
 
-Field can be arranged alphabetically (or reverse) by clicking on a button.
+
 
 That's as far I've got.
