@@ -2,6 +2,8 @@ window.onload = function () {
     (function () {
         // this loads data from a csv file, converts it, using a plugin, into an object and displays it. It needs jQuery for the ajax (loading the data) and for the plugin.
         
+        var prevfield =''; // don't like having this hanging here but... if button has been pressed twice, toggle sort order, else don't
+
         // load data from csv file
         $.ajax({
             url: "data.csv",
@@ -31,8 +33,10 @@ window.onload = function () {
             // add even handler (click) to buttons 
             for(var i=0;i<fields.length;i++) {
                 // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
+
+                // add one even to each button
                 (function (i) {
-                    $('.'+fields[i]).on('click', {field: fields[i], clicks : 'click'}, sortClick);;
+                    $('.'+fields[i]).one('click', {field: fields[i], dir: -1}, sortClick);
                 }(i));
             }
         } // setUpsortbuttons
@@ -41,17 +45,24 @@ window.onload = function () {
         function sortClick(event){
             // buttons click event
             var field = event.data.field; // which button has been clicked
-            var direction = 1; // direction of sort dependent on toggle of button
-            // handle the toggle
-            var clicks = $(this).data('clicks');
-            if (clicks) {
-                direction = 1;
-            } else {
-                direction = -1;
+            var direction = event.data.dir;
+
+            console.log (direction);
+
+            if (field === prevfield){
+                 // button pressed first time retains previous search direction. press it again and it toggles search direction.
+                direction = direction * -1;
             }
-            $(this).data("clicks", !clicks);
+           
+            // add one off event to button with new sort direction. This is recursive so it will keep adding itself when clicked. (is this a a good idea?). This is so that the direction of sort can be stored as event data and only changed if button is toggled.        
+            $('.' + field).one('click', {field: field, dir: direction}, sortClick);
+
+            prevfield = field;
+
             sortIt(data, field, direction);
             disPlay(data);
+
+
             $('.info').html(field); 
             arrowdir = (direction < 1)? 'up':'down';
             $('.arrow').removeClass('up down').addClass(arrowdir);
