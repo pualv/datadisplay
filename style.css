@@ -66,7 +66,20 @@ body,html {
 
 .arrow	{
 	float: right;
-	margin-top: -5px;
+	margin-top: -4px;
+}
+.down{
+	-ms-transform: rotate(180deg); 
+	-webkit-transform: rotate(180deg); 
+	transform: rotate(180deg);
+	margin-top: -8px;
+}
+
+.up{
+	-ms-transform: rotate(0deg); 
+	-webkit-transform: rotate(0deg); 
+	transform: rotate(0deg);
+	margin-top: -4px;
 }
 /*sidebar*/
 
@@ -93,7 +106,6 @@ body,html {
 	background-color: #cccccc;
 
 	text-align: center;
-	/*line-height: 6rem;  vertical centre text in circle */
 	border-radius: 50%; /* make div circle */
 	float: left;
 
@@ -103,30 +115,6 @@ body,html {
     align-content:center;
     flex-direction:column; /* column | row */
 }
-
-/*.arrow {
-	float: left;
-	display: block;
-	-webkit-transition-duration: 0.5s;
-    -moz-transition-duration: 0.5s;
-    transition-duration: 0.5s;
-}
-
-.up{
-	-ms-transform: rotate(180deg); 
-	-webkit-transform: rotate(180deg); 
-	transform: rotate(180deg);
-
-}
-
-.down{
-	-ms-transform: rotate(0deg); 
-	-webkit-transform: rotate(0deg); 
-	transform: rotate(0deg);
-}*/ 
-
-
-
 
 .asia {
 	background-color: #F6C4B9;

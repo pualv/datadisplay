@@ -63,8 +63,8 @@ window.onload = function () {
 
 
             $('.info').html(field); 
-            // arrowdir = (direction < 1)? 'up':'down';
-            // $('.arrow').removeClass('up down').addClass(arrowdir);
+            arrowdir = (direction < 1)? 'up':'down';
+            $('.' + field).children('.arrow').removeClass('up down').addClass(arrowdir);
         } //sortClick
 
         // ****** Action central *********
