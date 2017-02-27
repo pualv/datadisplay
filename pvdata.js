@@ -60,11 +60,8 @@ window.onload = function () {
 
             sortIt(data, field, direction);
             disPlay(data);
+            flipSortdirarrows (field, direction);
 
-
-            $('.info').html(field); 
-            arrowdir = (direction < 1)? 'up':'down';
-            $('.' + field).children('.arrow').removeClass('up down').addClass(arrowdir);
         } //sortClick
 
         // ****** Action central *********
@@ -122,6 +119,12 @@ window.onload = function () {
                 });
             return data;
         } //sortIt
+
+        function  flipSortdirarrows (field, direction){
+            $('.info').html(field); 
+            arrowdir = (direction < 1)? 'up':'down';
+            $('.' + field).children('.arrow').removeClass('up down').addClass(arrowdir);
+        } // flipSortdirarrow
 
     }());
 }; // onload;
