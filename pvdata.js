@@ -47,8 +47,6 @@ window.onload = function () {
             var field = event.data.field; // which button has been clicked
             var direction = event.data.dir;
 
-            console.log (direction);
-
             if (field === prevfield){
                  // button pressed first time retains previous search direction. press it again and it toggles search direction.
                 direction = direction * -1;
@@ -64,8 +62,8 @@ window.onload = function () {
 
 
             $('.info').html(field); 
-            arrowdir = (direction < 1)? 'up':'down';
-            $('.arrow').removeClass('up down').addClass(arrowdir);
+            // arrowdir = (direction < 1)? 'up':'down';
+            // $('.arrow').removeClass('up down').addClass(arrowdir);
         } //sortClick
 
         // ****** Action central *********

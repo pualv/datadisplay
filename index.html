@@ -22,20 +22,22 @@
 </head>
 
 <body>
+	<div class="container">
+		<div class="side">
+			<h2>Sort by:</h2>
+			<div id ="buttons"></div><!-- /#buttons -->	
+		</div><!-- /side -->
 
-	<div id="controls">
-		<h3>Sort by:</h3>
-		<div id ="buttons"></div><!-- /#buttons -->	
-	</div><!-- /#controls -->
-	
-	<!-- csv data from https://www.worlddata.info/downloads/countries.csv -->
-
-	<h1 class='info'>name</h1>
-	<img class = 'arrow up' src = 'arrow.svg' height='48'>
-
-	<div id='content'>
-
-	</div><!-- content -->	
+		<div class="main">
+			<h2 class='title'>Countries of the world</h2>
+			<div class="infowrap">
+				<h3>Sorted by&nbsp;</h3><h3 class='info'>name</h3>
+			</div><!-- /.infowrap -->
+			<div id='content'>
+				<!-- csv data from https://www.worlddata.info/downloads/countries.csv -->
+			</div><!-- content -->
+		</div><!-- /.main -->
+	</div><!-- /.container -->
 
 </body>
 

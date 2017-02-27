@@ -1,35 +1,84 @@
-body {
-		font-family: arial;
+* {
+	 box-sizing: border-box;
 }
 
+body,html {
+		font-family: arial;
+		margin: 0;
+		height: 100%;
+}
 
+/*page structure*/
+.container {
+  height: 100%;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: box;
+  
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  box-orient: horizontal;
+}
+
+.side {
+	background-color: #eaeaea;
+	width: 10%;
+	-ms-flex: 0 100px;
+	-webkit-box-flex:  0;
+	-moz-box-flex:  0;
+	-ms-box-flex:  0;
+	box-flex:  0;  
+	padding: 1rem;
+}
+
+.main {
+	background-color: #fafafa;
+	-ms-flex: 1;
+	-webkit-box-flex: 1;
+	-moz-box-flex: 1;
+	-ms-box-flex: 1;
+	box-flex: 1;
+	padding: 1rem;
+}
+/*page structure*/
+
+
+/*sidebar*/
 .button{
-	width: 6rem;
-	height: 1.5rem;
+	float: left;
+	width: 100%;
+	height: 2rem;
 	background-color: #333;
 	color: #fafafa;
-	text-align: center;
-	float: left;
-	padding-top: .25rem;
-	margin-left: .5rem;
-	margin-bottom: .5rem;
+	margin-bottom: .25rem;
 	border-radius: 5%; /* make div circle */
+	text-align: center;
+	padding-top: .5rem;
 }
 
 .button:hover{
 	background-color: #933;
 }
+/*sidebar*/
 
+/*main*/
+.title {
+	margin-bottom: 0;
+}
 
-#content {
-	width: 90%;
+.infowrap {
+	width: 100%;
+	float: left;
+}
+.infowrap h3{
+	display: inline;
 	float: left;
 }
 
-#controls{
-	width: 10%;
-	float: left;
-}
 
 .unit {
 	font-size: .8rem;
@@ -50,7 +99,7 @@ body {
     flex-direction:column; /* column | row */
 }
 
-.arrow {
+/*.arrow {
 	float: left;
 	display: block;
 	-webkit-transition-duration: 0.5s;
@@ -69,14 +118,10 @@ body {
 	-ms-transform: rotate(0deg); 
 	-webkit-transform: rotate(0deg); 
 	transform: rotate(0deg);
-} 
+}*/ 
 
 
-.info {
-	float: left;
-	display: block;
-	margin-top: .7rem;
-}
+
 
 .asia {
 	background-color: #F6C4B9;
@@ -109,3 +154,4 @@ body {
 .australia {
 	background-color: #F9CEE4;
 }
+/*main*/
