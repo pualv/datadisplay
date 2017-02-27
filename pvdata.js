@@ -26,7 +26,8 @@ window.onload = function () {
             // draw buttons
             for (var i = 0; i < fields.length; i = i + 1) {
                 name = fields[i];
-                buttoncode =  "<div class='" + name + " button'>" + name + "</div>";
+                buttoncode =  "<div class='" + name + " button'>" + name;
+                buttoncode += "<div class='arrow'><img src = 'arrow.svg' height=24px></div></div>";
                 document.getElementById('buttons').innerHTML += buttoncode;
             }
 

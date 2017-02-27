@@ -56,12 +56,17 @@ body,html {
 	color: #fafafa;
 	margin-bottom: .25rem;
 	border-radius: 5%; /* make div circle */
-	text-align: center;
+	padding-left: 1rem;
 	padding-top: .5rem;
 }
 
 .button:hover{
-	background-color: #933;
+	background-color: #009AB2;
+}
+
+.arrow	{
+	float: right;
+	margin-top: -5px;
 }
 /*sidebar*/
 
