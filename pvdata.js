@@ -20,7 +20,8 @@ window.onload = function () {
             var fields = [
                 'name',
                 'area',
-                'population'
+                'population',
+                'lifeexpect'
             ];
 
             // draw buttons
@@ -59,7 +60,7 @@ window.onload = function () {
             prevfield = field;
 
             sortIt(data, field, direction);
-            disPlay(data);
+            disPlay(data, field);
             flipSortdirarrows (field, direction);
 
         } //sortClick
@@ -87,15 +88,22 @@ window.onload = function () {
         } //onjectIfy
 
 
-        function disPlay(dataset){
+        function disPlay(dataset, field){
         // displays the data
+        // field is passed so that countries with empty relevant fields is not displayed
 
             // clear prev content (if any) so new data is not appended
             document.getElementById('content').innerHTML = '';
 
             for (i = 0; i < dataset.length; i = i + 1) {
-                var unitwrite = "<div class='unit " + dataset[i].continent + "'>" + dataset[i].name + "</div>";
-                document.getElementById('content').innerHTML += unitwrite;
+                if (dataset[i][field] != 0){
+                // don't show country if field is empty
+                     var unitwrite = "<div class='unit " + dataset[i].continent + "'>" + dataset[i].name + "</div>";
+                    document.getElementById('content').innerHTML += unitwrite;
+                }
+                   
+                
+                
             }
         } //disPlay
 
