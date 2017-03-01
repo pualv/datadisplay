@@ -1,10 +1,9 @@
 window.onload = function () {
     (function () {
-        // this loads data from a csv file, converts it, using a plugin, into an object and displays it. It needs jQuery for the ajax (loading the data) and for the plugin.
+        // loads data from a csv file, converts it, using a plugin, into an object and displays it. Sidebar buttons to sort by field created. Hover over displayed record shows fields. 
+        //jQuery required.
         
-        var prevfield =''; // don't like having this hanging here but... if button has been pressed twice, toggle sort order, else don't
-
-      
+        var prevfield =''; // don't like having this hanging here but is necessary.
 
         // load data from csv file
         $.ajax({
@@ -34,24 +33,20 @@ window.onload = function () {
                 document.getElementById('buttons').innerHTML += buttoncode;
             }
 
-            // add even handler (click) to buttons 
+            // add event handler (click) to buttons 
             for(var i=0;i<fields.length;i++) {
                 // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
 
-                // add one even to each button
+                // add 'one' event to each button. This sets up initial click. Subsequent click events are added in sortClick(). This is because event data is added to the button to indicate direction of sort. This toggles with each click so event has to be added to button with updated direction data.
                 (function (i) {
                     $('.'+fields[i]).one('click', {field: fields[i], dir: -1}, sortClick);
                 }(i));
             }
         } // setUpsortbuttons
 
-    function numberCommas (n){
-        n = n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return n;
-    }
 
         function setUphoverinfo(){
-            // Apply hover event to countries as an event map. This is the only way I could get it to work passing the event (e) and 'this' referring to the actual '.unit' hovered over (rather than '#content')
+            // Apply hover event to countries as an event map. This is the only way I could get it to work passing the event (e) and having 'this' referring to the actual '.unit' hovered over (rather than '#content')
 
             $('#content').on({
                 mouseenter: function (e) {
@@ -59,10 +54,11 @@ window.onload = function () {
                     $('.hoverbox').removeClass('hb_hide').addClass('hb_show');
                     $('.hoverbox').css('left', e.pageX-100).css('top', e.pageY -120);
 
+                    // get the record number from the class of div hovered over
                     var countryno = $(this).attr('class').split('_')[1];
 
+                    // get the required content for the hoverbox and display it
                     var content = getHovercontent(countryno);
-
                     $('.hoverbox').html(content);
                 },
                 mouseleave: function () {
@@ -74,6 +70,7 @@ window.onload = function () {
             );
         } // setUphoverinfo
 
+
         function getHovercontent(countryno){
             //this is a lumpy way of sorting everything out. It's not 'automated' but it's probably a sensible way of doing it currently....
 
@@ -81,16 +78,14 @@ window.onload = function () {
             countryarea = numberCommas(data[countryno].area);
             countrypopulation  = numberCommas(data[countryno].population);
 
-            // if no data
+            // if no data. Currently only 1 field has missing data. 
             lifeexpect = data[countryno].lifeexpect;
             countrylife = lifeexpect !=0 ? lifeexpect : 'n/a';
-
 
             var countryname =  '<b>' + data[countryno].name + '</b></br>';
             var countryarea = 'Area: ' + countryarea + 'sq km</br>';
             var countrypop = 'Pop: ' + countrypopulation + '</br>';
             var countrylife = 'Life expect: ' + countrylife + '</br>';
-
             
             var content = countryname + countryarea + countrypop+ countrylife;
 
@@ -98,11 +93,8 @@ window.onload = function () {
         } // getHovercontent
 
 
-
-
-
         function sortClick(event){
-            // buttons click event
+            // sort buttons click event
             var field = event.data.field; // which button has been clicked
             var direction = event.data.dir;
 
@@ -119,14 +111,12 @@ window.onload = function () {
             sortIt(data, field, direction);
             disPlay(data, field);
             flipSortdirarrows (field, direction);
-
         } //sortClick
 
-        // ****** Action central *********
 
+        // ****** Action central *********
         setUpsortbuttons();
         setUphoverinfo();
-
 
         function dataLoaded(csv){
             // do everything once data is loaded
@@ -136,15 +126,13 @@ window.onload = function () {
             disPlay(data);
         } //dataLoaded
 
-
         // *********************************
-
 
         function objectIfy(csv){
         // uses plugin to convert csv to object
             data = $.csv.toObjects(csv);
             return data;
-        } //onjectIfy
+        } //objectIfy
 
 
         function disPlay(dataset, field){
@@ -162,7 +150,6 @@ window.onload = function () {
                      var unitwrite = "<div class='unit " + '_' + i + '_ ' + dataset[i].continent + "'>" + dataset[i].name + "</div>";
                     document.getElementById('content').innerHTML += unitwrite;
                 }
-                
             }
         } //disPlay
 
@@ -194,9 +181,10 @@ window.onload = function () {
         } // flipSortdirarrow
 
 
+        function numberCommas (n){
+            n = n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return n;
+        }
       
-
-   
-
     }());
 }; // onload;
