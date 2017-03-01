@@ -4,6 +4,8 @@ window.onload = function () {
         
         var prevfield =''; // don't like having this hanging here but... if button has been pressed twice, toggle sort order, else don't
 
+      
+
         // load data from csv file
         $.ajax({
             url: "data.csv",
@@ -43,7 +45,25 @@ window.onload = function () {
             }
         } // setUpsortbuttons
 
-        
+        function setUphoverinfo(){
+            // Apply hover event to countries as an event map. This is the only way I could get it to work passing the event (e) and 'this' referring to the actual '.unit' hovered over (rather than '#content')
+
+            $('#content').on({
+                mouseenter: function (e) {
+                    $('.hoverbox').removeClass('hb_hide').addClass('hb_show');
+                    $('.hoverbox').css('left', e.pageX-100).css('top', e.pageY -120);
+                    var content = $(this).text();
+                    $('.hoverbox').html(content);
+                },
+                mouseleave: function () {
+                     $('.hoverbox').removeClass('hb_show').addClass('hb_hide');
+                }
+            },
+            '.unit'
+            );
+        } // setUphoverinfo
+
+
         function sortClick(event){
             // buttons click event
             var field = event.data.field; // which button has been clicked
@@ -68,6 +88,8 @@ window.onload = function () {
         // ****** Action central *********
 
         setUpsortbuttons();
+        setUphoverinfo();
+
 
         function dataLoaded(csv){
             // do everything once data is loaded
@@ -101,8 +123,6 @@ window.onload = function () {
                      var unitwrite = "<div class='unit " + dataset[i].continent + "'>" + dataset[i].name + "</div>";
                     document.getElementById('content').innerHTML += unitwrite;
                 }
-                   
-                
                 
             }
         } //disPlay
