@@ -45,23 +45,60 @@ window.onload = function () {
             }
         } // setUpsortbuttons
 
+    function numberCommas (n){
+        n = n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return n;
+    }
+
         function setUphoverinfo(){
             // Apply hover event to countries as an event map. This is the only way I could get it to work passing the event (e) and 'this' referring to the actual '.unit' hovered over (rather than '#content')
 
             $('#content').on({
                 mouseenter: function (e) {
+                    // show and position hoverbox on hover
                     $('.hoverbox').removeClass('hb_hide').addClass('hb_show');
                     $('.hoverbox').css('left', e.pageX-100).css('top', e.pageY -120);
-                    var content = $(this).text();
+
+                    var countryno = $(this).attr('class').split('_')[1];
+
+                    var content = getHovercontent(countryno);
+
                     $('.hoverbox').html(content);
                 },
                 mouseleave: function () {
+                    // hide hoverbox
                      $('.hoverbox').removeClass('hb_show').addClass('hb_hide');
                 }
             },
             '.unit'
             );
         } // setUphoverinfo
+
+        function getHovercontent(countryno){
+            //this is a lumpy way of sorting everything out. It's not 'automated' but it's probably a sensible way of doing it currently....
+
+            // format big numbers
+            countryarea = numberCommas(data[countryno].area);
+            countrypopulation  = numberCommas(data[countryno].population);
+
+            // if no data
+            lifeexpect = data[countryno].lifeexpect;
+            countrylife = lifeexpect !=0 ? lifeexpect : 'n/a';
+
+
+            var countryname =  '<b>' + data[countryno].name + '</b></br>';
+            var countryarea = 'Area: ' + countryarea + 'sq km</br>';
+            var countrypop = 'Pop: ' + countrypopulation + '</br>';
+            var countrylife = 'Life expect: ' + countrylife + '</br>';
+
+            
+            var content = countryname + countryarea + countrypop+ countrylife;
+
+            return content;
+        } // getHovercontent
+
+
+
 
 
         function sortClick(event){
@@ -120,7 +157,9 @@ window.onload = function () {
             for (i = 0; i < dataset.length; i = i + 1) {
                 if (dataset[i][field] != 0){
                 // don't show country if field is empty
-                     var unitwrite = "<div class='unit " + dataset[i].continent + "'>" + dataset[i].name + "</div>";
+
+                    // add classes. 'unit' = style. 'continent'  = colour key. '_i_' = record number to ref country in array to get info for hover box.
+                     var unitwrite = "<div class='unit " + '_' + i + '_ ' + dataset[i].continent + "'>" + dataset[i].name + "</div>";
                     document.getElementById('content').innerHTML += unitwrite;
                 }
                 
@@ -153,6 +192,11 @@ window.onload = function () {
             arrowdir = (direction < 1)? 'up':'down';
             $('.' + field).children('.arrow').removeClass('up down').addClass(arrowdir);
         } // flipSortdirarrow
+
+
+      
+
+   
 
     }());
 }; // onload;
