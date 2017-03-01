@@ -85,11 +85,12 @@ window.onload = function () {
 
 
         function setUpcolourbuttons(){
-            // puts sort buttons on screen. Could be done automatically for all fields. This allows selected fields only
+            // puts sort buttons on screen. Could be done automatically for all fields. This allows selected fields only. 'clear' is null. 
             var fields = [
                 'area',
                 'population',
-                'lifeexpect'
+                'lifeexpect',
+                'none'
             ];
 
             // draw buttons
@@ -115,21 +116,45 @@ window.onload = function () {
 
         function colourClick(event){
             // colour buttons click event
+            $('.unit').removeClass('mark');
+
             var field = event.data.field; // which button has been clicked
 
-            for(var i=0;i<data.length;i++) {
-                var fieldval = data[i][field];
-               
-                if (fieldval < 243610){
-                    changeclass = '_' + i + '_';
-                         console.log(changeclass, fieldval);
-                    $('.' + changeclass).addClass('red');
-                }
+            var limit = markData(50, field);
 
+            if (field != 'none'){
+                for(var i=0;i<data.length;i++) {
+                    var fieldval = data[i][field];
+                    
+                    if (fieldval > limit){
+                        changeclass = '_' + i + '_';
+                        $('.' + changeclass).addClass('mark');
+                    }
+
+                }
             }
+           
         } //colourClick
 
-         function setUphoverinfo(){
+        function markData(percent, field){
+            // work out breakpoint for marking countries based on percent
+            var relevant = 0
+            for (i = 0; i < data.length; i = i + 1) {
+                if (data[i][field] != 0){
+                    // count records with relevant data
+                    relevant = relevant + 1;
+                }
+            }
+            var breakpoint = parseInt (relevant * percent / 100);
+
+                answer = data[breakpoint][field];
+                console.log (answer);
+            return parseInt(answer);
+        } // markData
+
+
+
+        function setUphoverinfo(){
             // Apply hover event to countries as an event map. This is the only way I could get it to work passing the event (e) and having 'this' referring to the actual '.unit' hovered over (rather than '#content')
 
             $('#content').on({
