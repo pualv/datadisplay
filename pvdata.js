@@ -16,6 +16,24 @@ window.onload = function () {
         }); //ajax
 
 
+         // ****** Action central *********
+        setUpsortbuttons();
+        setUpcolourbuttons();
+        // THESE FUNCTIONS COULD BE COMBINED? Also their respective click handlers (to a lesser extent). Is it worth doing this or will it make code unnec. complex?
+
+        setUphoverinfo();
+
+        function dataLoaded(csv){
+            // do everything once data is loaded
+
+            // convert csv file to object
+            data = objectIfy(csv);
+            disPlay(data);
+        } //dataLoaded
+
+        // *********************************
+
+
         function setUpsortbuttons(){
             // puts sort buttons on screen. Could be done automatically for all fields. This allows selected fields only
             var fields = [
@@ -30,7 +48,7 @@ window.onload = function () {
                 name = fields[i];
                 buttoncode =  "<div class='" + name + " button'>" + name;
                 buttoncode += "<div class='arrow'><img src = 'arrow.svg' height=24px></div></div>";
-                document.getElementById('buttons').innerHTML += buttoncode;
+                document.getElementById('sortbuttons').innerHTML += buttoncode;
             }
 
             // add event handler (click) to buttons 
@@ -39,13 +57,79 @@ window.onload = function () {
 
                 // add 'one' event to each button. This sets up initial click. Subsequent click events are added in sortClick(). This is because event data is added to the button to indicate direction of sort. This toggles with each click so event has to be added to button with updated direction data.
                 (function (i) {
-                    $('.'+fields[i]).one('click', {field: fields[i], dir: -1}, sortClick);
+                    $('#sortbuttons .'+fields[i]).one('click', {field: fields[i], dir: -1}, sortClick);
                 }(i));
             }
         } // setUpsortbuttons
 
 
-        function setUphoverinfo(){
+        function sortClick(event){
+            // sort buttons click event
+            var field = event.data.field; // which button has been clicked
+            var direction = event.data.dir;
+
+            if (field === prevfield){
+                 // button pressed first time retains previous search direction. press it again and it toggles search direction.
+                direction = direction * -1;
+            }
+           
+            // add one off event to button with new sort direction. This is recursive so it will keep adding itself when clicked. (is this a a good idea?). This is so that the direction of sort can be stored as event data and only changed if button is toggled.        
+            $('#sortbuttons .' + field).one('click', {field: field, dir: direction}, sortClick);
+
+            prevfield = field;
+
+            sortIt(data, field, direction);
+            disPlay(data, field);
+            flipSortdirarrows (field, direction);
+        } //sortClick
+
+
+        function setUpcolourbuttons(){
+            // puts sort buttons on screen. Could be done automatically for all fields. This allows selected fields only
+            var fields = [
+                'area',
+                'population',
+                'lifeexpect'
+            ];
+
+            // draw buttons
+            for (var i = 0; i < fields.length; i = i + 1) {
+                name = fields[i];
+                buttoncode =  "<div class='" + name + " button'>" + name;
+               
+                document.getElementById('colourbuttons').innerHTML += buttoncode;
+            }
+
+            // add event handler (click) to buttons 
+            for(var i=0;i<fields.length;i++) {
+                // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
+
+                // add 'one' event to each button. This sets up initial click. Subsequent click events are added in sortClick(). This is because event data is added to the button to indicate direction of sort. This toggles with each click so event has to be added to button with updated direction data.
+
+                //NOTE 'on' not 'one' on event handler as this does not need to be reset
+                (function (i) {
+                    $('#colourbuttons .'+fields[i]).on('click', {field: fields[i], dir: -1}, colourClick);
+                }(i));
+            }
+        } // setUpcolourbuttons
+
+        function colourClick(event){
+            // colour buttons click event
+            var field = event.data.field; // which button has been clicked
+
+            for(var i=0;i<data.length;i++) {
+                var fieldval = data[i][field];
+               
+                if (fieldval < 243610){
+                    changeclass = '_' + i + '_';
+                         console.log(changeclass, fieldval);
+                    $('.' + changeclass).addClass('red');
+                }
+
+            }
+        } //colourClick
+
+         function setUphoverinfo(){
             // Apply hover event to countries as an event map. This is the only way I could get it to work passing the event (e) and having 'this' referring to the actual '.unit' hovered over (rather than '#content')
 
             $('#content').on({
@@ -91,42 +175,7 @@ window.onload = function () {
 
             return content;
         } // getHovercontent
-
-
-        function sortClick(event){
-            // sort buttons click event
-            var field = event.data.field; // which button has been clicked
-            var direction = event.data.dir;
-
-            if (field === prevfield){
-                 // button pressed first time retains previous search direction. press it again and it toggles search direction.
-                direction = direction * -1;
-            }
-           
-            // add one off event to button with new sort direction. This is recursive so it will keep adding itself when clicked. (is this a a good idea?). This is so that the direction of sort can be stored as event data and only changed if button is toggled.        
-            $('.' + field).one('click', {field: field, dir: direction}, sortClick);
-
-            prevfield = field;
-
-            sortIt(data, field, direction);
-            disPlay(data, field);
-            flipSortdirarrows (field, direction);
-        } //sortClick
-
-
-        // ****** Action central *********
-        setUpsortbuttons();
-        setUphoverinfo();
-
-        function dataLoaded(csv){
-            // do everything once data is loaded
-
-            // convert csv file to object
-            data = objectIfy(csv);
-            disPlay(data);
-        } //dataLoaded
-
-        // *********************************
+       
 
         function objectIfy(csv){
         // uses plugin to convert csv to object
