@@ -53,7 +53,7 @@ window.onload = function () {
                     'area',
                     'population',
                     'lifeexpect',
-                    'none'
+                    'none' // if you need a 'clear' button
                 ]
             };
             setUpbuttons (sort);
@@ -133,7 +133,7 @@ window.onload = function () {
             }
 
             // bit kludgey? Initial event in setUpbuttons is added as 'one' not 'on' so only fires once. This is so the toggle of sort direction works: direction indicator is changed and passed to event as event data on each click. Obv not necessary here but permanent event is.
-            $('#colourbuttons .' + field).on('click', {field: field}, colourClick);
+            $('#colourbuttons .' + field).one('click', {field: field}, colourClick);
         } //colourClick
 
 
@@ -146,7 +146,7 @@ window.onload = function () {
         } //showSelect
 
         function fadeData(percent, field){
-            // work out breakpoint for fadeing countries based on percent
+            // work out breakpoint for fading countries based on percent
             var relevant = 0
             for (i = 0; i < data.length; i = i + 1) {
                 if (data[i][field] != 0){
@@ -156,7 +156,7 @@ window.onload = function () {
             }
             var breakpoint = parseInt (relevant * percent / 100);
                 answer = data[breakpoint][field];
-                // console.log (answer);
+                console.log (breakpoint);
             return parseInt(answer);
         } // fadeData
 

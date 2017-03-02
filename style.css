@@ -129,6 +129,11 @@ body,html {
     /* border animation when marked */
    
 	opacity: 1;
+		-webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-ms-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	transition: all 1s ease;
 }
 
 /*hover info box*/
@@ -203,11 +208,7 @@ body,html {
 .fade {
 
 	opacity: .25;
-	-webkit-transition: all 1s ease;
-	-moz-transition: all 1s ease;
-	-ms-transition: all 1s ease;
-	-o-transition: all 1s ease;
-	transition: all 1s ease;
+
 }
 
 /*main*/
