@@ -5,37 +5,38 @@ window.onload = function () {
         
         var prevfield =''; // don't like having this hanging here but is necessary.
 
-        // load data from csv file
+        // ****** load data from csv file ******
         $.ajax({
             url: "data.csv",
-            cache: false,
             success: function(csv){
-            // when it's loaded call the function that turns into an object
-            dataLoaded(csv);
+                // when data is loaded,  pass it (csv) to the function that turns into an object & displays records.
+                dataLoaded(csv);
+                disPlay(data);
             }
         }); //ajax
 
 
-         // ****** Action central *********
+         // ****** Setup event handlers ******
         setUpsortbuttons();
         setUpcolourbuttons();
         // THESE FUNCTIONS COULD BE COMBINED? Also their respective click handlers (to a lesser extent). Is it worth doing this or will it make code unnec. complex?
-
         setUphoverinfo();
 
-        function dataLoaded(csv){
-            // do everything once data is loaded
+        // ****** Functions *******
 
+         function dataLoaded(csv){
             // convert csv file to object
             data = objectIfy(csv);
-            disPlay(data);
         } //dataLoaded
 
-        // *********************************
-
+        function objectIfy(csv){
+            // use plugin to convert csv to object
+            data = $.csv.toObjects(csv);
+            return data;
+        } //objectIfy
 
         function setUpsortbuttons(){
-            // puts sort buttons on screen. Could be done automatically for all fields. This allows selected fields only
+            // put sort buttons on screen. Could be done automatically for all fields. This allows selected fields only
             var fields = [
                 'name',
                 'area',
@@ -113,6 +114,7 @@ window.onload = function () {
                 }(i));
             }
         } // setUpcolourbuttons
+        
 
         function colourClick(event){
             // colour buttons click event
@@ -136,6 +138,7 @@ window.onload = function () {
            
         } //colourClick
 
+
         function markData(percent, field){
             // work out breakpoint for marking countries based on percent
             var relevant = 0
@@ -146,12 +149,10 @@ window.onload = function () {
                 }
             }
             var breakpoint = parseInt (relevant * percent / 100);
-
                 answer = data[breakpoint][field];
                 console.log (answer);
             return parseInt(answer);
         } // markData
-
 
 
         function setUphoverinfo(){
@@ -202,16 +203,9 @@ window.onload = function () {
         } // getHovercontent
        
 
-        function objectIfy(csv){
-        // uses plugin to convert csv to object
-            data = $.csv.toObjects(csv);
-            return data;
-        } //objectIfy
-
-
         function disPlay(dataset, field){
-        // displays the data
-        // field is passed so that countries with empty relevant fields is not displayed
+            // displays the data
+            // field is passed so that countries with empty relevant fields is not displayed
 
             // clear prev content (if any) so new data is not appended
             document.getElementById('content').innerHTML = '';
@@ -229,13 +223,12 @@ window.onload = function () {
 
 
         function sortIt(dataset, field, direction){
-        // sort the data according to which button has been clicked    
-
+            // sort the data according to which button has been clicked    
                 // set direction of search params based on direction
                 var opp = -1 * direction;
                 data = dataset.sort(function (a, b){
                     var a = a[field];
-                    var b = b[field]; 
+                    var b = b[field];
 
                     // check for string or number cos numbers will be sorted by string value (e.g. 1023, 23, 301, 45)
                     if (isNaN(a) || isNaN(b)) {
@@ -248,7 +241,9 @@ window.onload = function () {
             return data;
         } //sortIt
 
+
         function  flipSortdirarrows (field, direction){
+            // change direction of arrows on sort buttons showing sort direction
             $('.info').html(field); 
             arrowdir = (direction < 1)? 'up':'down';
             $('.' + field).children('.arrow').removeClass('up down').addClass(arrowdir);
@@ -256,9 +251,10 @@ window.onload = function () {
 
 
         function numberCommas (n){
+            // put commas in long numbers
             n = n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             return n;
-        }
+        } // numberCommas
       
     }());
 }; // onload;
