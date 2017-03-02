@@ -50,6 +50,11 @@ body,html {
 
 /*sidebar*/
 
+.sideblock {
+	margin-bottom: 2rem;
+	overflow: hidden;
+}
+
 .button{
 	float: left;
 	width: 100%;

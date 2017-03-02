@@ -15,16 +15,7 @@ window.onload = function () {
             }
         }); //ajax
 
-
-         // ****** Setup event handlers ******
-        setUpsortbuttons();
-        setUpcolourbuttons();
-        // THESE FUNCTIONS COULD BE COMBINED? Also their respective click handlers (to a lesser extent). Is it worth doing this or will it make code unnec. complex?
-        setUphoverinfo();
-
-        // ****** Functions *******
-
-         function dataLoaded(csv){
+        function dataLoaded(csv){
             // convert csv file to object
             data = objectIfy(csv);
         } //dataLoaded
@@ -35,34 +26,64 @@ window.onload = function () {
             return data;
         } //objectIfy
 
-        function setUpsortbuttons(){
-            // put sort buttons on screen. Could be done automatically for all fields. This allows selected fields only
-            var fields = [
-                'name',
-                'area',
-                'population',
-                'lifeexpect'
-            ];
 
-            // draw buttons
-            for (var i = 0; i < fields.length; i = i + 1) {
-                name = fields[i];
+         // ****** Setup event handlers ******
+        // setUpsortbuttons();
+        // setUpcolourbuttons();
+
+        callButtons();
+
+        // THESE FUNCTIONS COULD BE COMBINED? Also their respective click handlers (to a lesser extent). Is it worth doing this or will it make code unnec. complex?
+        setUphoverinfo();
+
+        // ****** Functions *******
+
+         function callButtons(){
+             var sort = {
+                div: 'sortbuttons',
+                func: sortClick,
+                fields : [
+                    'name',
+                    'area',
+                    'population',
+                    'lifeexpect'
+                ]
+            };
+
+            var colour = {
+                div: 'colourbuttons',
+                func: colourClick,
+                fields : [
+                    'area',
+                    'population',
+                    'lifeexpect',
+                    'none'
+                ]
+            };
+            setUpbuttons (sort);
+            setUpbuttons (colour);
+         } //callButtons
+
+         function setUpbuttons(buttons){
+
+             // draw buttons
+            for (var i = 0; i < buttons.fields.length; i = i + 1) {
+                name = buttons.fields[i];
                 buttoncode =  "<div class='" + name + " button'>" + name;
-                buttoncode += "<div class='arrow'><img src = 'arrow.svg' height=24px></div></div>";
-                document.getElementById('sortbuttons').innerHTML += buttoncode;
+                if (buttons.div === 'sortbuttons') {
+                     buttoncode += "<div class='arrow'><img src = 'arrow.svg' height=24px></div></div>";
+                }
+               
+                document.getElementById(buttons.div).innerHTML += buttoncode;
             }
-
             // add event handler (click) to buttons 
-            for(var i=0;i<fields.length;i++) {
+            for(var i=0;i<buttons.fields.length;i++) {
                 // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
-
-                // add 'one' event to each button. This sets up initial click. Subsequent click events are added in sortClick(). This is because event data is added to the button to indicate direction of sort. This toggles with each click so event has to be added to button with updated direction data.
                 (function (i) {
-                    $('#sortbuttons .'+fields[i]).one('click', {field: fields[i], dir: -1}, sortClick);
+                    $('#' + buttons.div +' .'+buttons.fields[i]).on('click', {field: buttons.fields[i], dir: -1}, buttons.func);
                 }(i));
             }
-        } // setUpsortbuttons
-
+         } // setUpbuttons
 
         function sortClick(event){
             // sort buttons click event
@@ -85,37 +106,6 @@ window.onload = function () {
         } //sortClick
 
 
-        function setUpcolourbuttons(){
-            // puts sort buttons on screen. Could be done automatically for all fields. This allows selected fields only. 'clear' is null. 
-            var fields = [
-                'area',
-                'population',
-                'lifeexpect',
-                'none'
-            ];
-
-            // draw buttons
-            for (var i = 0; i < fields.length; i = i + 1) {
-                name = fields[i];
-                buttoncode =  "<div class='" + name + " button'>" + name;
-               
-                document.getElementById('colourbuttons').innerHTML += buttoncode;
-            }
-
-            // add event handler (click) to buttons 
-            for(var i=0;i<fields.length;i++) {
-                // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
-
-                // add 'one' event to each button. This sets up initial click. Subsequent click events are added in sortClick(). This is because event data is added to the button to indicate direction of sort. This toggles with each click so event has to be added to button with updated direction data.
-
-                //NOTE 'on' not 'one' on event handler as this does not need to be reset
-                (function (i) {
-                    $('#colourbuttons .'+fields[i]).on('click', {field: fields[i], dir: -1}, colourClick);
-                }(i));
-            }
-        } // setUpcolourbuttons
-        
-
         function colourClick(event){
             // colour buttons click event
             $('.unit').removeClass('mark');
@@ -132,10 +122,8 @@ window.onload = function () {
                         changeclass = '_' + i + '_';
                         $('.' + changeclass).addClass('mark');
                     }
-
                 }
             }
-           
         } //colourClick
 
 
