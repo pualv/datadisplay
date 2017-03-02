@@ -80,7 +80,7 @@ window.onload = function () {
             for(var i=0;i<buttons.fields.length;i++) {
                 // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
                 (function (i) {
-                    $('#' + buttons.div +' .'+buttons.fields[i]).on('click', {field: buttons.fields[i], dir: -1}, buttons.func);
+                    $('#' + buttons.div +' .'+buttons.fields[i]).one('click', {field: buttons.fields[i], dir: -1}, buttons.func);
                 }(i));
             }
          } // setUpbuttons
@@ -95,7 +95,7 @@ window.onload = function () {
                 direction = direction * -1;
             }
            
-            // add one off event to button with new sort direction. This is recursive so it will keep adding itself when clicked. (is this a a good idea?). This is so that the direction of sort can be stored as event data and only changed if button is toggled.        
+            // add one off event to button with new sort direction. This is recursive so it will keep adding itself when clicked (is this a a good idea?). This is so that the direction of sort can be stored as event data and only changed if button is toggled.        
             $('#sortbuttons .' + field).one('click', {field: field, dir: direction}, sortClick);
 
             prevfield = field;
@@ -112,18 +112,27 @@ window.onload = function () {
 
             var field = event.data.field; // which button has been clicked
 
+
             var limit = markData(50, field);
 
             if (field != 'none'){
                 for(var i=0;i<data.length;i++) {
+                    
+
                     var fieldval = data[i][field];
                     
                     if (fieldval > limit){
                         changeclass = '_' + i + '_';
                         $('.' + changeclass).addClass('mark');
+
+                        // add to data array so it can persist after sort
+                        data[i]['mark'] = true;
                     }
                 }
             }
+
+            // bit kludgey? Initial event in setUpbuttons is added as 'one' not 'on' so only fires once. This is so the toggle of sort direction works: direction indicator is changed and passed to event as event data on each click. Obv not necessary here but permanent event is.
+            $('#colourbuttons .' + field).on('click', {field: field}, colourClick);
         } //colourClick
 
 
@@ -138,7 +147,7 @@ window.onload = function () {
             }
             var breakpoint = parseInt (relevant * percent / 100);
                 answer = data[breakpoint][field];
-                console.log (answer);
+                // console.log (answer);
             return parseInt(answer);
         } // markData
 
@@ -202,8 +211,14 @@ window.onload = function () {
                 if (dataset[i][field] != 0){
                 // don't show country if field is empty
 
+                    // if it's been marked, retain the mark
+                     var markclass = (dataset[i].mark) ? ' mark' : '';
+                        console.log (dataset[i].mark);
+
                     // add classes. 'unit' = style. 'continent'  = colour key. '_i_' = record number to ref country in array to get info for hover box.
-                     var unitwrite = "<div class='unit " + '_' + i + '_ ' + dataset[i].continent + "'>" + dataset[i].name + "</div>";
+                     var unitwrite = "<div class='unit " + '_' + i + '_ ' + dataset[i].continent + markclass +"'>" + dataset[i].name + "</div>";
+
+
                     document.getElementById('content').innerHTML += unitwrite;
                 }
             }
@@ -218,7 +233,7 @@ window.onload = function () {
                     var a = a[field];
                     var b = b[field];
 
-                    // check for string or number cos numbers will be sorted by string value (e.g. 1023, 23, 301, 45)
+                    // check for string or number otherwise numbers will be sorted by string value (e.g. 1023, 23, 301, 45)
                     if (isNaN(a) || isNaN(b)) {
                         // sort strings 
                         return ((a < b) ? direction : ((a > b) ? opp : 0));
@@ -239,7 +254,7 @@ window.onload = function () {
 
 
         function numberCommas (n){
-            // put commas in long numbers
+            // put commas in long numbers to display in hover box
             n = n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             return n;
         } // numberCommas
