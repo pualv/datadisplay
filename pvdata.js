@@ -46,18 +46,18 @@ window.onload = function () {
                 ]
             };
 
-            var colour = {
-                div: 'colourbuttons',
-                func: colourClick,
+            var hilight = {
+                div: 'hilightbuttons',
+                func: hilightClick,
                 fields : [
                     'area',
                     'population',
                     'lifeexpect',
-                    'none' // if you need a 'clear' button
+                    'none' 
                 ]
             };
             setUpbuttons (sort);
-            setUpbuttons (colour);
+            setUpbuttons (hilight);
          } //callButtons
 
         function setUpbuttons(buttons){
@@ -95,7 +95,7 @@ window.onload = function () {
             }
            
             // add one off event to button with new sort direction. This is recursive so it will keep adding itself when clicked (is this a a good idea?). This is so that the direction of sort can be stored as event data and only changed if button is toggled.        
-            $('#sortbuttons .' + field).on('click', {field: field, dir: direction}, sortClick);
+            $('#sortbuttons .' + field).one('click', {field: field, dir: direction}, sortClick);
 
             prevfield = field;
 
@@ -105,35 +105,35 @@ window.onload = function () {
         } //sortClick
 
 
-        function colourClick(event){
+        function hilightClick(event){
             // colour buttons click event
             // remove all previous fades
             $('.unit').removeClass('fade');
 
-            showSelect('#colourbuttons', this);
+            showSelect('#hilightbuttons', this);
 
             var field = event.data.field; // which button has been clicked
             var limit = fadeData(50, field);
 
-            if (field != 'none'){
-                for(var i=0;i<data.length;i++) {
-                    var changeclass = '_' + i + '_';
+        
+            for(var i=0;i<data.length;i++) {
+                var changeclass = '_' + i + '_';
 
-                    // clear all previous fades from data
-                    data[i].fade = false;
+                // clear all previous fades from data
+                data[i].fade = false;
 
-                    var fieldval = data[i][field];
-                    
-                    if (fieldval < limit){
-                        $('.' + changeclass).addClass('fade');
-                        // add to data array so fade can persist after sort buttons clicked
-                        data[i]['fade'] = true;
-                    }
+                var fieldval = data[i][field];
+                
+                if (fieldval < limit){
+                    $('.' + changeclass).addClass('fade');
+                    // add to data array so fade can persist after sort buttons clicked
+                    data[i].fade = true;
                 }
             }
+          
 
             // bit kludgey? Initial event in setUpbuttons is added as 'one' not 'on' so only fires once. This is so the toggle of sort direction works: direction indicator is changed and passed to event as event data on each click. Obv not necessary here but permanent event is.
-            $('#colourbuttons .' + field).one('click', {field: field}, colourClick);
+            $('#hilightbuttons .' + field).one('click', {field: field}, hilightClick);
         } //colourClick
 
 
@@ -147,16 +147,10 @@ window.onload = function () {
 
         function fadeData(percent, field){
             // work out breakpoint for fading countries based on percent
-            var relevant = 0
-            for (i = 0; i < data.length; i = i + 1) {
-                if (data[i][field] != 0){
-                    // count records with relevant data
-                    relevant = relevant + 1;
-                }
-            }
-            var breakpoint = parseInt (relevant * percent / 100);
+          
+            var breakpoint = parseInt (data.length * percent / 100);
                 answer = data[breakpoint][field];
-                console.log (breakpoint);
+                console.log (data[breakpoint]);
             return parseInt(answer);
         } // fadeData
 
