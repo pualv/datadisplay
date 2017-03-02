@@ -26,20 +26,16 @@ window.onload = function () {
             return data;
         } //objectIfy
 
-
-         // ****** Setup event handlers ******
-        // setUpsortbuttons();
-        // setUpcolourbuttons();
-
         callButtons();
-
-        // THESE FUNCTIONS COULD BE COMBINED? Also their respective click handlers (to a lesser extent). Is it worth doing this or will it make code unnec. complex?
         setUphoverinfo();
+
+        // show that 'name' sort is selected at start
+        showSelect('#sortbuttons', '.name');
 
         // ****** Functions *******
 
-         function callButtons(){
-             var sort = {
+        function callButtons(){
+            var sort = {
                 div: 'sortbuttons',
                 func: sortClick,
                 fields : [
@@ -64,9 +60,9 @@ window.onload = function () {
             setUpbuttons (colour);
          } //callButtons
 
-         function setUpbuttons(buttons){
+        function setUpbuttons(buttons){
 
-             // draw buttons
+            // draw buttons
             for (var i = 0; i < buttons.fields.length; i = i + 1) {
                 name = buttons.fields[i];
                 buttoncode =  "<div class='" + name + " button'>" + name;
@@ -87,6 +83,9 @@ window.onload = function () {
 
         function sortClick(event){
             // sort buttons click event
+
+            showSelect('#sortbuttons', this);
+
             var field = event.data.field; // which button has been clicked
             var direction = event.data.dir;
 
@@ -96,7 +95,7 @@ window.onload = function () {
             }
            
             // add one off event to button with new sort direction. This is recursive so it will keep adding itself when clicked (is this a a good idea?). This is so that the direction of sort can be stored as event data and only changed if button is toggled.        
-            $('#sortbuttons .' + field).one('click', {field: field, dir: direction}, sortClick);
+            $('#sortbuttons .' + field).on('click', {field: field, dir: direction}, sortClick);
 
             prevfield = field;
 
@@ -108,25 +107,27 @@ window.onload = function () {
 
         function colourClick(event){
             // colour buttons click event
-            $('.unit').removeClass('mark');
+            // remove all previous fades
+            $('.unit').removeClass('fade');
+
+            showSelect('#colourbuttons', this);
 
             var field = event.data.field; // which button has been clicked
-
-
-            var limit = markData(50, field);
+            var limit = fadeData(50, field);
 
             if (field != 'none'){
                 for(var i=0;i<data.length;i++) {
-                    
+                    var changeclass = '_' + i + '_';
+
+                    // clear all previous fades from data
+                    data[i].fade = false;
 
                     var fieldval = data[i][field];
                     
-                    if (fieldval > limit){
-                        changeclass = '_' + i + '_';
-                        $('.' + changeclass).addClass('mark');
-
-                        // add to data array so it can persist after sort
-                        data[i]['mark'] = true;
+                    if (fieldval < limit){
+                        $('.' + changeclass).addClass('fade');
+                        // add to data array so fade can persist after sort buttons clicked
+                        data[i]['fade'] = true;
                     }
                 }
             }
@@ -136,8 +137,16 @@ window.onload = function () {
         } //colourClick
 
 
-        function markData(percent, field){
-            // work out breakpoint for marking countries based on percent
+        function showSelect(buttongroup, button){
+            // remove selected from any other buttons
+            $(buttongroup).children().removeClass('selected');
+
+            // show current fadeed field
+            $(button).addClass('selected');
+        } //showSelect
+
+        function fadeData(percent, field){
+            // work out breakpoint for fadeing countries based on percent
             var relevant = 0
             for (i = 0; i < data.length; i = i + 1) {
                 if (data[i][field] != 0){
@@ -149,7 +158,7 @@ window.onload = function () {
                 answer = data[breakpoint][field];
                 // console.log (answer);
             return parseInt(answer);
-        } // markData
+        } // fadeData
 
 
         function setUphoverinfo(){
@@ -211,12 +220,11 @@ window.onload = function () {
                 if (dataset[i][field] != 0){
                 // don't show country if field is empty
 
-                    // if it's been marked, retain the mark
-                     var markclass = (dataset[i].mark) ? ' mark' : '';
-                        console.log (dataset[i].mark);
+                    // if it's been fadeed, retain the fade
+                     var fadeclass = (dataset[i].fade) ? ' fade' : '';
 
                     // add classes. 'unit' = style. 'continent'  = colour key. '_i_' = record number to ref country in array to get info for hover box.
-                     var unitwrite = "<div class='unit " + '_' + i + '_ ' + dataset[i].continent + markclass +"'>" + dataset[i].name + "</div>";
+                     var unitwrite = "<div class='unit " + '_' + i + '_ ' + dataset[i].continent + fadeclass +"'>" + dataset[i].name + "</div>";
 
 
                     document.getElementById('content').innerHTML += unitwrite;

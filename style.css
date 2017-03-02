@@ -71,6 +71,10 @@ body,html {
 	background-color: #009AB2;
 }
 
+.selected {
+		background-color: #0089A1;
+}
+
 .arrow	{
 	float: right;
 	margin-top: -4px;
@@ -121,6 +125,10 @@ body,html {
     justify-content:center;
     align-content:center;
     flex-direction:column; /* column | row */
+
+    /* border animation when marked */
+   
+	opacity: 1;
 }
 
 /*hover info box*/
@@ -192,8 +200,14 @@ body,html {
 	background-color: #F9CEE4;
 }
 
-.mark {
-	border: solid 3px #dd9999;
+.fade {
+
+	opacity: .25;
+	-webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-ms-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	transition: all 1s ease;
 }
 
 /*main*/
