@@ -72,6 +72,7 @@ window.onload = function () {
                
                 document.getElementById(buttons.div).innerHTML += buttoncode;
             }
+
             // add event handler (click) to buttons 
             for(var i=0;i<buttons.fields.length;i++) {
                 // has to be done as closure or doesn't work. Didn't work when part of prev loop either.
@@ -84,6 +85,7 @@ window.onload = function () {
         function sortClick(event){
             // sort buttons click event
 
+            // show which button has been clicked
             showSelect('#sortbuttons', this);
 
             var field = event.data.field; // which button has been clicked
@@ -115,9 +117,8 @@ window.onload = function () {
             var field = event.data.field; // which button has been clicked
             var limit = fadeData(50, field);
 
-        
             for(var i=0;i<data.length;i++) {
-                var changeclass = '_' + i + '_';
+                // var changeclass = '_' + i + '_';
 
                 // clear all previous fades from data
                 data[i].fade = false;
@@ -125,12 +126,11 @@ window.onload = function () {
                 var fieldval = data[i][field];
                 
                 if (fieldval < limit){
-                    $('.' + changeclass).addClass('fade');
                     // add to data array so fade can persist after sort buttons clicked
                     data[i].fade = true;
                 }
             }
-          
+            changeDisplay(data);
 
             // bit kludgey? Initial event in setUpbuttons is added as 'one' not 'on' so only fires once. This is so the toggle of sort direction works: direction indicator is changed and passed to event as event data on each click. Obv not necessary here but permanent event is.
             $('#hilightbuttons .' + field).one('click', {field: field}, hilightClick);
@@ -150,7 +150,6 @@ window.onload = function () {
           
             var breakpoint = parseInt (data.length * percent / 100);
                 answer = data[breakpoint][field];
-                console.log (data[breakpoint]);
             return parseInt(answer);
         } // fadeData
 
@@ -205,26 +204,38 @@ window.onload = function () {
 
         function disPlay(dataset, field){
             // displays the data
-            // field is passed so that countries with empty relevant fields is not displayed
-
             // clear prev content (if any) so new data is not appended
             document.getElementById('content').innerHTML = '';
 
             for (i = 0; i < dataset.length; i = i + 1) {
-                if (dataset[i][field] != 0){
-                // don't show country if field is empty
 
-                    // if it's been fadeed, retain the fade
-                     var fadeclass = (dataset[i].fade) ? ' fade' : '';
+                // if it's been faded, retain the fade
+                 var fadeclass = (dataset[i].fade) ? ' fade' : '';
 
-                    // add classes. 'unit' = style. 'continent'  = colour key. '_i_' = record number to ref country in array to get info for hover box.
-                     var unitwrite = "<div class='unit " + '_' + i + '_ ' + dataset[i].continent + fadeclass +"'>" + dataset[i].name + "</div>";
+                // add classes. 'unit' = style. 'continent'  = colour key. '_i_' = record number to ref country in array to get info for hover box.
+                var recordno = '_' + i + '_ '
+                 var unitwrite = "<div class='unit " + recordno + dataset[i].continent + fadeclass +"'>" + dataset[i].name + "</div>";
+                document.getElementById('content').innerHTML += unitwrite;
 
-
-                    document.getElementById('content').innerHTML += unitwrite;
+                
+                if (dataset[i][field] == 0){
+                    console.log(recordno);
+                    $('.' + recordno).addClass('nodata');
                 }
+
             }
+
+         
         } //disPlay
+
+        function changeDisplay(dataset){
+            // changes class of already displayed data (rather than sorting it and redisplaying). This could all be set up in disPlay data but fade effect would not work unless fade class is add afterwards. Also may be useful if more features added.
+            for (i = 0; i < dataset.length; i = i + 1) {
+                var fadeclass = (dataset[i].fade) ? ' fade' : '';
+                var classchange = '._' + i + '_ ';
+                $(classchange).addClass(fadeclass);
+            }
+        } //changeDisplay
 
 
         function sortIt(dataset, field, direction){

@@ -206,9 +206,13 @@ body,html {
 }
 
 .fade {
-
 	opacity: .25;
-
 }
+
+.nodata {
+	color: #fafafa;
+	background-color: #ddd;
+}
+
 
 /*main*/
