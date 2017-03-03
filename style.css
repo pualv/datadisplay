@@ -210,8 +210,7 @@ body,html {
 }
 
 .nodata {
-	color: #fafafa;
-	background-color: #ddd;
+	display: none;
 }
 
 

@@ -11,13 +11,15 @@ window.onload = function () {
             success: function(csv){
                 // when data is loaded,  pass it (csv) to the function that turns into an object & displays records.
                 dataLoaded(csv);
-                disPlay(data);
             }
         }); //ajax
+
+
 
         function dataLoaded(csv){
             // convert csv file to object
             data = objectIfy(csv);
+            disPlay(data);
         } //dataLoaded
 
         function objectIfy(csv){
@@ -106,6 +108,7 @@ window.onload = function () {
             flipSortdirarrows (field, direction);
         } //sortClick
 
+        
 
         function hilightClick(event){
             // colour buttons click event
@@ -115,7 +118,7 @@ window.onload = function () {
             showSelect('#hilightbuttons', this);
 
             var field = event.data.field; // which button has been clicked
-            var limit = fadeData(50, field);
+            var limit = fadeData(data, 10, field);
 
             for(var i=0;i<data.length;i++) {
                 // var changeclass = '_' + i + '_';
@@ -145,11 +148,22 @@ window.onload = function () {
             $(button).addClass('selected');
         } //showSelect
 
-        function fadeData(percent, field){
+        function fadeData(dataset, percent, field){
             // work out breakpoint for fading countries based on percent
-          
-            var breakpoint = parseInt (data.length * percent / 100);
-                answer = data[breakpoint][field];
+            var workdata = [];
+            // remove entries with no data for this field
+            for (i = 0; i < dataset.length; i = i + 1) {
+                if (dataset[i][field] != 0){
+                    workdata.push(dataset[i])
+                }
+            }
+            
+            // sort what's left 
+            workdata = sortIt(workdata, field, -1);
+
+            // get break point by percentage (number of record)
+            var breakpoint = parseInt (workdata.length * percent / 100);
+            answer = workdata[breakpoint][field];
             return parseInt(answer);
         } // fadeData
 
@@ -213,16 +227,13 @@ window.onload = function () {
                  var fadeclass = (dataset[i].fade) ? ' fade' : '';
 
                 // add classes. 'unit' = style. 'continent'  = colour key. '_i_' = record number to ref country in array to get info for hover box.
-                var recordno = '_' + i + '_ '
+                var recordno = '_' + i + '_ ';
                  var unitwrite = "<div class='unit " + recordno + dataset[i].continent + fadeclass +"'>" + dataset[i].name + "</div>";
                 document.getElementById('content').innerHTML += unitwrite;
 
-                
                 if (dataset[i][field] == 0){
-                    console.log(recordno);
                     $('.' + recordno).addClass('nodata');
                 }
-
             }
 
          
@@ -242,7 +253,7 @@ window.onload = function () {
             // sort the data according to which button has been clicked    
                 // set direction of search params based on direction
                 var opp = -1 * direction;
-                data = dataset.sort(function (a, b){
+                newdata = dataset.sort(function (a, b){
                     var a = a[field];
                     var b = b[field];
 
@@ -254,7 +265,7 @@ window.onload = function () {
                     // or sort numbers. * direction is to flip sort direction
                     return (a - b) * direction;
                 });
-            return data;
+            return newdata;
         } //sortIt
 
 
